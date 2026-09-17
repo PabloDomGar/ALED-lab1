@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -130,13 +131,27 @@ public class EEGModel {
 	 * @throws IOException Thrown if the file can't be written.
 	 */
 	public void saveFile(String fileName) throws IOException {
-		File f = new File(fileName);
-		FileOutputStream fis = new FileOutputStream(f);
-		FileWritter = 
+		File f = new File (fileName);
+		FileOutputStream fos = new FileOutputStream(f);
+		PrintStream wr = new PrintStream(fos);
 		
 		
-		
-		
+		int num = 0;
+		for (int i = 0; i<measurements.size(); i++) {
+			
+			wr.print(num + ", ");
+			if (num<256) {
+				num++;
+			} else {
+				num = 0;
+			}
+			for (int j = 0; j<measurements.get(i).numChannels(); j++) {
+				wr.print(measurements.get(i).getChannel(j) + ", ");
+			}
+			wr.println();
+			
+		}
+		fos.close();
 		
 	}
 
@@ -255,13 +270,16 @@ public class EEGModel {
 		if (args.length > 0) {
 			EEGModel eeg = new EEGModel(args[0]);
 			eeg.plotData();
-			// TODO
+			
 			
 		} else {
 			EEGModel eeg = new EEGModel();
 			eeg.createSyntheticData(1000);
-			// TODO
-			
+			try {
+				eeg.saveFile("Synthetic.txt");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
 		}
 	}
 }
