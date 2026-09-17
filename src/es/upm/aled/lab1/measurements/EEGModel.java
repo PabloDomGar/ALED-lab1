@@ -122,7 +122,7 @@ public class EEGModel {
 		}
 		fis.close();
 	}
-
+//hola
 	/**
 	 * Stores the EEGModel in a text file, following the OpenBCI format.
 	 * 
